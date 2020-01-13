@@ -75,22 +75,26 @@ export default class SortingVisualizer extends React.Component {
     const { array } = this.state;
 
     return (
-      <div className="array-container">
-        {array.map((value, idx) => (
-          <div
-            className="array-bar"
-            key={idx}
-            style={{
-              backgroundColor: PRIMARY_COLOR,
-              height: `${value}px`
-            }}
-          ></div>
-        ))}
-        <button onClick={() => this.resetArray()}>Generate New Array</button>
-        <button onClick={() => this.mergeSort()}>Merge Sort</button>
-        <button onClick={() => this.quickSort()}>Quick Sort TODO</button>
-        <button onClick={() => this.heapSort()}>Heap Sort TODO</button>
-        <button onClick={() => this.bubbleSort()}>Bubble Sort TODO</button>
+      <div>
+        <div className="array-container">
+          {array.map((value, idx) => (
+            <div
+              className="array-bar"
+              key={idx}
+              style={{
+                backgroundColor: PRIMARY_COLOR,
+                height: `${value}px`
+              }}
+            ></div>
+          ))}
+        </div>
+        <div>
+          <button onClick={() => this.resetArray()}>Generate New Array</button>
+          <button onClick={() => this.mergeSort()}>Merge Sort</button>
+          <button onClick={() => this.quickSort()}>Quick Sort TODO</button>
+          <button onClick={() => this.heapSort()}>Heap Sort TODO</button>
+          <button onClick={() => this.bubbleSort()}>Bubble Sort TODO</button>
+        </div>
       </div>
     );
   }
