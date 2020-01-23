@@ -1,6 +1,8 @@
 import React from "react";
-import { getMergeSortAnimations } from "../sortingAlgorithms/mergeSort.js";
+import { getMergeSortAnimations } from "../SortingAlgorithms/mergeSort.js";
 import "./SortingVisualizer.css";
+import Slider from "@material-ui/core/Slider";
+import Button from "@material-ui/core/Button";
 
 // Change this value for the speed of the animations.
 const ANIMATION_SPEED_MS = 1;
@@ -19,7 +21,8 @@ export default class SortingVisualizer extends React.Component {
     super(props);
 
     this.state = {
-      array: []
+      array: [],
+      animationSpeed: 100
     };
   }
 
@@ -28,15 +31,16 @@ export default class SortingVisualizer extends React.Component {
   }
 
   resetArray() {
-    const array = [];
+    const randomArray = [];
     for (let i = 0; i < NUMBER_OF_ARRAY_BARS; i++) {
-      array.push(randomIntFromInterval(5, 730));
+      randomArray.push(randomIntFromInterval(5, 730));
     }
-    this.setState({ array });
+    this.setState({ array: randomArray });
   }
 
   mergeSort() {
     const animations = getMergeSortAnimations(this.state.array);
+    console.log(animations.length);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName("array-bar");
       const isColorChange = i % 3 !== 2;
@@ -48,13 +52,13 @@ export default class SortingVisualizer extends React.Component {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        }, (i * 100) / this.state.animationSpeed);
       } else {
         setTimeout(() => {
           const [barOneIdx, newHeight] = animations[i];
           const barOneStyle = arrayBars[barOneIdx].style;
           barOneStyle.height = `${newHeight}px`;
-        }, i * ANIMATION_SPEED_MS);
+        }, (i * 100) / this.state.animationSpeed);
       }
     }
   }
@@ -71,11 +75,61 @@ export default class SortingVisualizer extends React.Component {
     // We leave it as an exercise to the viewer of this code to implement this method.
   }
 
+  sliderHandler = (event, newValue) => {
+    this.setState({ animationSpeed: newValue });
+  };
+
   render() {
     const { array } = this.state;
 
     return (
       <div>
+        <div className="header-container">
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => this.resetArray()}
+          >
+            Generate New Array
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => this.mergeSort()}
+          >
+            Merge Sort
+          </Button>
+          <Button
+            color="secondary"
+            variant="contained"
+            onClick={() => this.quickSort()}
+          >
+            Quick Sort TODO
+          </Button>
+          <Button
+            color="secondary"
+            variant="contained"
+            onClick={() => this.heapSort()}
+          >
+            Heap Sort TODO
+          </Button>
+          <Button
+            color="secondary"
+            variant="contained"
+            onClick={() => this.bubbleSort()}
+          >
+            Bubble Sort TODO
+          </Button>
+          <Slider
+            className="speedSlider"
+            value={this.animationSpeed}
+            onChange={this.sliderHandler}
+            aria-labelledby="discrete-slider"
+            valueLabelDisplay="auto"
+            min={1}
+            max={100}
+          />
+        </div>
         <div className="array-container">
           {array.map((value, idx) => (
             <div
@@ -87,13 +141,6 @@ export default class SortingVisualizer extends React.Component {
               }}
             ></div>
           ))}
-        </div>
-        <div>
-          <button onClick={() => this.resetArray()}>Generate New Array</button>
-          <button onClick={() => this.mergeSort()}>Merge Sort</button>
-          <button onClick={() => this.quickSort()}>Quick Sort TODO</button>
-          <button onClick={() => this.heapSort()}>Heap Sort TODO</button>
-          <button onClick={() => this.bubbleSort()}>Bubble Sort TODO</button>
         </div>
       </div>
     );
